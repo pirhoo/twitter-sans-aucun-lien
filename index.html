@@ -1,0 +1,119 @@
+<!DOCTYPE html> 
+<html>
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>
+      Twitter + Aucun Lien = Twitter sans aucun lien
+    </title>
+    <link href="./lib/css/zp-base.css" type="text/css" media="all" rel="stylesheet" />
+    <link href="./lib/css/zp-type.css" type="text/css" media="all" rel="stylesheet" />
+    <link href="./lib/css/zp-forms.css" type="text/css" media="all" rel="stylesheet" />
+    <link href="./lib/css/zp-print.css" type="text/css" media="print" rel="stylesheet" />
+    <style>
+      header h1 {
+        text-align:center;
+        margin:20px;
+      }
+      pre {
+        background:inherit;
+        border:0;
+        margin:0;
+        padding:0;
+      }
+      .zp-wrapper {
+        display:block;
+        margin:10px auto;
+        width:600px;
+
+      }
+      .bookmark {
+        font-size:20px;
+        text-align:center;
+        display:block;
+      }
+      footer {
+        color: #CCCCCC;
+        font-size: 12px;
+        font-style: italic;
+        display:block;
+        margin:10px auto;
+        width:600px;
+      }
+      footer a {
+        color: #CCCCCC;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="zp-wrapper">
+      <header>
+        <h1>Twitter + Aucun Lien</h1>
+      </header>    
+        
+      <h2>Wut?</h2> 
+      <p  class="intro">
+        Le but de cet outil, vous faites bien de demander, c'est supprimer de manière automatique (toutes les 5 secondes), les Tweets dans votre Timeline qui contiennent des liens ou des mentions. C'est comme ça qu'on les aime.   
+      </p>   
+      <h2>How-to</h2>
+      <p  class="intro">
+        Pour ça on utilise un bookmarklet : une petite application codée en javascript qui s’exécute directement dans l'URL de votre navigateur. Pour l'utiliser, ajoutez le lien ci-dessous à vos Bookmarks. Puis, depuis votre Timeline sur Twitter, cliquez sur le bookmark que venez de créer. Les tweets superflux disparaissent. Cliquez une seconde fois pour intérompre le script et réstaurer tous les tweets.
+      </p>
+      <p>
+        <big class="bookmark">
+          <a href='javascript:(function(){if(window.AucunLien==undefined){window.AucunLien={};window.AucunLien.clear=function(){$(".tweet-text").each(function(){var a=$(this).html();if(a.indexOf("http://")>-1||a.indexOf("https://")>-1||$(this).find(".twitter-atreply").length>0){$(this).parents(".stream-item").hide()}})}}if(window.AucunLien.timer==undefined){window.AucunLien.timer=setInterval(window.AucunLien.clear,5*1e3);window.AucunLien.clear()}else{clearInterval(window.AucunLien.timer);window.AucunLien.timer = undefined;$(".stream-item").show()}})();'>Twitter + Aucun Lien</a>
+        </big>
+      </p>        
+      <h2>How it works</h2>
+      <p  class="intro">
+        Son fonctionnement est très simple. Toutes les 5 secondes (et lorsqu'il est lancé) ce petit script va parcourir tous les tweets présents sur la page que vous visitez. S'il découvre un lien ou une mention dans le tweet, il le cache sans aucune autre forme de procès. Facile hein ?
+      </p>
+      <blockquote>
+        <pre>javascript:(function() { 
+
+    if(window.AucunLien == undefined) {
+    
+        window.AucunLien = {}
+
+        // function to clear tweets
+        window.AucunLien.clear = function() {
+            $(".tweet-text").each(function() {   
+               var text = $(this).html();                    
+
+               // detect http link
+               if( text.indexOf("http://") > -1 
+               // or https links
+               || text.indexOf("https://") > -1
+               // or mentions
+               || $(this).find(".twitter-atreply").length > 0 ) {
+                   $(this).parents(".stream-item").hide();
+               }
+
+            });
+        }
+    }
+
+    // set interval and clear
+    if(window.AucunLien.timer == undefined) {
+        window.AucunLien.timer = setInterval(window.AucunLien.clear, 5*1000);
+
+        // first clear
+        window.AucunLien.clear();
+
+    // or restore the tweets
+    } else {    
+      // clear the timer
+      clearInterval(window.AucunLien.timer);
+      window.AucunLien.timer = undefined;
+
+      // and show elements
+      $(".stream-item").show();
+    }
+
+})();</pre>
+      </blockquote>
+    </div>
+    <footer>
+      <p>By <a href="http://twitter.com/pirhoo">@pirhoo</a></p>
+    </footer>
+  </body>
+</html>
